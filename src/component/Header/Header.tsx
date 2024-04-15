@@ -3,6 +3,7 @@ import './Header.css';
 
 export const Header = () => {
     const wallet = useTonWallet();
+    console.log('WALEET', wallet)
     return (
         <>
             {wallet && <>

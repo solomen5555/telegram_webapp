@@ -1,5 +1,7 @@
 import { SendTransactionRequest, useTonConnectUI, useTonWallet } from "@tonconnect/ui-react";
 import './TxForm.css';
+import { useCallback, useState } from "react";
+import ReactJson, { InteractionProps } from 'react-json-view';
 
 // In this example, we are using a predefined smart contract state initialization (`stateInit`)
 // to interact with an "EchoContract". This contract is designed to send the value back to the sender,
@@ -16,7 +18,7 @@ const defaultTx: SendTransactionRequest = {
             amount: '1',
             // (optional) State initialization in boc base64 format.
             stateInit: 'te6cckEBBAEAOgACATQCAQAAART/APSkE/S88sgLAwBI0wHQ0wMBcbCRW+D6QDBwgBDIywVYzxYh+gLLagHPFsmAQPsAlxCarA==',
-            // (optional) Payload in boc base64 format.
+            // // (optional) Payload in boc base64 format.
             payload: 'te6ccsEBAQEADAAMABQAAAAASGVsbG8hCaTc/g==',
         },
 
@@ -27,24 +29,24 @@ const defaultTx: SendTransactionRequest = {
 
 export function TxForm() {
 
-    // const [tx, setTx] = useState(defaultTx);
+    const [tx, setTx] = useState(defaultTx);
 
     const wallet = useTonWallet();
 
     const [tonConnectUi] = useTonConnectUI();
 
-    // const onChange = useCallback((value: InteractionProps) => {
-    //     setTx(value.updated_src as SendTransactionRequest)
-    // }, []);
+    const onChange = useCallback((value: InteractionProps) => {
+        setTx(value.updated_src as SendTransactionRequest)
+    }, []);
 
     return (
         <div className="send-tx-form">
             <h3>Configure and send transaction</h3>
 
-            {/* <ReactJson theme="ocean" src={defaultTx} onEdit={onChange} onAdd={onChange} onDelete={onChange} /> */}
+            <ReactJson theme="ocean" src={defaultTx} onEdit={onChange} onAdd={onChange} onDelete={onChange} />
 
             {wallet ? (
-                <button onClick={() => tonConnectUi.sendTransaction(defaultTx)}>
+                <button onClick={() => tonConnectUi.sendTransaction(tx)}>
                     Send transaction
                 </button>
             ) : (
